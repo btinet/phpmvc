@@ -7,9 +7,14 @@ use App\Core\Controller\AbstractController;
 class AppController extends AbstractController
 {
 
-    public function index()
+    /**
+     * @param $i
+     * @return string
+     */
+    public function index($i = null): string
     {
-        echo 'x';
+        if(null === $i) return "Du hast keine Nummer eingegeben.";
+        return "Deine Nummer lautet: {$i}";
     }
 
 }

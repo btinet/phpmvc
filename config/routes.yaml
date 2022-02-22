@@ -1,0 +1,13 @@
+# Route zum Index der Class "AppController"
+app_index:
+  expression: '/'
+  controller: 'App\Controller\AppController'
+  method: 'index'
+  request: 'get'
+
+# Route zum Index der Class "AppController" mit Übergabe einer numerischen Variable
+app_index_id:
+  expression: '/([0-9]*)'
+  controller: 'App\Controller\AppController'
+  method: 'index'
+  request: 'get'
