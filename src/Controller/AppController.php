@@ -35,7 +35,7 @@ class AppController extends AbstractController
 
     }
 
-    public function create()
+    public function create(): string
     {
         $this->drinkCoffeeIfTired('Ben');
         $this->drinkCoffeeIfTired('David');
@@ -79,6 +79,7 @@ class AppController extends AbstractController
             echo '<div style="height: 40px; width: '.$amount.'%; background-color:blue; color:white;padding:5px;margin-bottom:2px;">'.$number.' ('.$abs.'Würfe)</div>';
         }
         echo "</div>";
+        return $this->view->render('base.html',['name' => 'Ben']);
 
     }
 

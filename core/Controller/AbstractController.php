@@ -3,16 +3,20 @@
 namespace Core\Controller;
 
 use Core\Kernel;
+use League\Plates\Engine;
 
 class AbstractController implements ControllerInterface
 {
 
-    private array $routes = array();
+    protected array $routes = array();
+    protected Engine $view;
 
     public function __construct()
     {
         $kernel = new Kernel();
         $this->routes = $kernel->getPlainRoutes();
+        $this->view = new Engine(project_root.'/templates');
+
     }
 
     /**
