@@ -1,11 +1,20 @@
 <?php
+/*
+ * Copyright (c) 2022. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+ * Morbi non lorem porttitor neque feugiat blandit. Ut vitae ipsum eget quam lacinia accumsan.
+ * Etiam sed turpis ac ipsum condimentum fringilla. Maecenas magna.
+ * Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus.
+ * Vestibulum commodo. Ut rhoncus gravida arcu.
+ */
 
-namespace App;
+namespace Core;
 
+use Core\ErrorHandler\Exception\KernelException;
+use Core\ErrorHandler\ExceptionHandler;
 use Exception;
 use Symfony\Component\Yaml\Yaml;
 
-class Kernel
+final class Kernel
 {
 
     private static array $routes = array();
@@ -190,17 +199,18 @@ class Kernel
     }
 
     /**
-     * @throws Exception
+     * @param $class
+     * @param $method
+     * @param array $mandatory
+     * @return false|mixed
      */
     private function runControllerMethod($class, $method, array $mandatory = array())
     {
-        if (!class_exists($class)) {
-            throw new Exception('Class not found.');
-        }
+        if (!class_exists($class))throw new KernelException(sprintf('Class "%s" not found.',$class));
         $class = new $class;
-        if(!method_exists($class,$method)) {
-            throw new Exception('Method not found.');
-        }
+        if(!method_exists($class,$method))throw new KernelException(sprintf('Method "%s" not found.',$method));
+        if(!is_callable([$class,$method])) throw new KernelException(sprintf('Method "%s" not callable.',$method));
+
         return call_user_func_array(array($class, $method), $mandatory);
     }
 
@@ -228,9 +238,10 @@ class Kernel
             self::add($route['expression'], function () use ($route) {
                 $arguments = func_get_args();
                 try {
-                    return $this->runControllerMethod($route['controller'], $route['method'], $arguments);
-                } catch (Exception $e) {
-                    return 'Exception abgefangen: '. $e->getMessage() . "\n";
+                    return self::runControllerMethod($route['controller'], $route['method'], $arguments);
+                } catch (KernelException $e) {
+                    $exceptionHandler =  new ExceptionHandler($e);
+                    return $exceptionHandler->renderView();
                 }
             }, $route['request']);
         }
@@ -243,17 +254,13 @@ class Kernel
             header('HTTP/1.0 404 Not Found');
             try {
                 $controller = self::setNotFoundController();
-                echo self::runControllerMethod($controller,'notFound',func_get_args());
-            } catch (Exception $e) {
-                echo 'Exception abgefangen: '. $e->getMessage() . "\n";
+                return self::runControllerMethod($controller,'notFound',func_get_args());
+            } catch (KernelException $e) {
+                $exceptionHandler =  new ExceptionHandler($e);
+                return $exceptionHandler->getException()->getMessage();
             }
         });
         return $this;
-    }
-
-    public function init()
-    {
-        self::run('/');
     }
 
 }

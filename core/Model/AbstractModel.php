@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Core\Model;
+namespace Core\Model;
 
 class AbstractModel implements ModelInterface
 {

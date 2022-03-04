@@ -5,6 +5,13 @@ app_index:
   method: 'index'
   request: 'get'
 
+# Route zur Methode "show" der Class "AppController"
+app_show_routes:
+  expression: '/coffee'
+  controller: 'App\Controller\AppController'
+  method: 'create'
+  request: 'get'
+
 # Route zum Index der Class "AppController" mit Übergabe einer numerischen Variable
 app_index_id:
   expression: '/([0-9]*)'

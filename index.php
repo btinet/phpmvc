@@ -1,7 +1,7 @@
 <?php
 // PHP-Dateien werden mit <?php eingeleitet. Folgt danach kein HTML, darf das schließende Tag am Ende fehlen.
 // Verwende die Kernel-Class als Kernel.
-use App\Kernel;
+use Core\Kernel;
 // Definiere das Wurzelverzeichnis des Projekts.
 const project_root = __DIR__;
 // Lade die Autoload-Class von Composer zum dynamischen Nachladen unserer Classes.
@@ -13,8 +13,8 @@ $kernel
     ->addRoutes()
     // Einzelne Route hinzufügen. Anonyme Funktion ausführen.
     ->add('/test', function () {
-        return 'x';
+        return 'Dies ist die Testroute "/test" und gibt nur diesen String aus.';
     })
     // Kernel initialisieren
-    ->init()
+    ->run()
 ;

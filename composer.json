@@ -5,7 +5,8 @@
     "license": "mit",
     "autoload": {
         "psr-4": {
-            "App\\": "src/"
+            "App\\": "src/",
+            "Core\\": "core/"
         }
     },
     "authors": [
@@ -16,6 +17,7 @@
     ],
     "minimum-stability": "dev",
     "require": {
-        "symfony/yaml": "5.4.x-dev"
+        "symfony/yaml": "5.4.x-dev",
+      "ext-json": "*"
     }
 }
