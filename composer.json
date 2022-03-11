@@ -19,6 +19,7 @@
     "require": {
         "symfony/yaml": "5.4.x-dev",
       "ext-json": "*",
-        "league/plates": "v3.x-dev"
+        "league/plates": "v3.x-dev",
+        "twbs/bootstrap": "dev-main"
     }
 }

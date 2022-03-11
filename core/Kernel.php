@@ -21,6 +21,7 @@ final class Kernel
     private array $plainRoutes = array();
     private static ?string $pathNotFound = null;
     private static ?string $methodNotAllowed = null;
+    private array $config = array();
 
 
     /**
@@ -33,12 +34,27 @@ final class Kernel
          */
         self::setPlainRoutes(Yaml::parseFile(project_root.'/config/routes.yaml'));
         /**
-         * Environment-Variablen auslesen und in globaler $_ENV-Variable speichern.
+         * Environment-Variablen auslesen und in $config-Variable als Array speichern.
          */
-        $env = Yaml::parseFile(project_root.'/config/env.yaml');
-        foreach ($env as $key => $value)
+        self::setConfig(Yaml::parseFile(project_root.'/config/env.yaml'));
+    }
+
+    /**
+     * @return string|array
+     */
+    public function getConfig(string $name)
+    {
+        return $this->config[$name];
+    }
+
+    /**
+     * @param array $config Array containing config name and its value.
+     */
+    public function setConfig(array $config): void
+    {
+        foreach ($config as $key => $value)
         {
-            $_ENV[$key] = $value;
+            $this->config[$key] = $value;
         }
     }
 
