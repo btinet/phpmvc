@@ -13,30 +13,32 @@
 <body class="container bg-light">
 <div class="card my-3">
     <div class="card-header">
+        <h1>Stack Trace</h1>
         <h3 class="mb-0"><?= $this->getException()->getMessage() ?></h3>
+        <h5>An error occurred in line <?= $this->getException()->getLine() ?> in "<a href="file://<?= $this->getException()->getFile() ?>" download type="application/octet-stream"><?= $this->getException()->getFile() ?></a>"</h5>
     </div>
     <ul class="list-group list-group-flush">
         <?php foreach($this->getException()->getTrace() as $key => $content): ?>
             <li class="list-group-item">
                 <div class="row">
                     <div class="col-12">
-                        <span><?= $content["file"] ?></span>
+                        <span><?= $content["file"] ?? 'Dateiname nicht anwendbar' ?></span>
                     </div>
                     <div class="row col-12">
                         <div class="row">
-                            <div class="col-2">Line</div>
-                            <div class="col-10"><?= $content["line"] ?></div>
+                            <div class="col-2 fw-bold">Line</div>
+                            <div class="col-10"><?= $content["line"]?? 'nicht anwendbar' ?></div>
                         </div>
                         <div class="row">
-                            <div class="col-2">Class</div>
-                            <div class="col-10"><?= $content["class"] ?></div>
+                            <div class="col-2 fw-bold">Class</div>
+                            <div class="col-10"><?= $content["class"] ?? 'nicht anwendbar' ?></div>
                         </div>
                         <div class="row">
-                            <div class="col-2">Method</div>
-                            <div class="col-10"><?= $content["function"] ?></div>
+                            <div class="col-2 fw-bold">Method</div>
+                            <div class="col-10"><?= $content["function"] ?? 'nicht anwendbar' ?></div>
                         </div>
                         <div class="row">
-                            <div class="col-2">Arguments</div>
+                            <div class="col-2 fw-bold">Arguments</div>
                             <div class="col-10">
                         <pre>
                         <?php foreach ($content["args"] as $argument): ?>

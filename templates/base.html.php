@@ -2,6 +2,7 @@
 
 /**
  * @var object|null $meta enthält Meta-Daten der Website
+ * @var object $response enthält Response-Daten des Controllers
  */
 
 ?>
@@ -16,10 +17,11 @@
         <?php if ($this->section('css')): ?>
             <?=$this->section('css')?>
         <?php else: ?>
-            <link rel="stylesheet" href="../vendor/twbs/bootstrap/dist/css/bootstrap.min.css">
-            <script type="javascript" src="../vendor/twbs/bootstrap/dist/js/bootstrap.min.js"></script>
+            <link rel="stylesheet" href="<?= $response->generateUrlFromString('/vendor/twbs/bootstrap/dist/css/bootstrap.min.css')?>">
         <?php endif ?>
 
+        <script type="javascript" src="<?= $response->generateUrlFromString('/vendor/twbs/bootstrap/dist/js/bootstrap.min.js')?>"></script>
+        <script type="text/javascript" src="<?= $response->generateUrlFromString('/assets/test.js')?>"></script>
         <title><?= $meta->get('title') ?></title>
     </head>
     <body class="h-100 d-flex flex-column justify-content-between">

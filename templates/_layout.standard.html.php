@@ -5,12 +5,18 @@
 
 /**
  * @var object|null $meta enthält Meta-Daten der Website
+ * @var object $response enthält Response-Daten des Controllers
  */
 
 /**
  * Übergeordnetes Template
  */
-$this->layout('base.html',['meta'=>$meta]);
+$this->layout('base.html',
+    [
+        'meta'=>$meta,
+        'response'=>$response
+    ]
+);
 
 ?>
 

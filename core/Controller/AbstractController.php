@@ -2,50 +2,74 @@
 
 namespace Core\Controller;
 
+use Core\Component\ConfigComponent\Config;
+use Core\Component\ConfigComponent\RouteConfig;
 use Core\Component\HttpComponent\Request;
 use Core\Component\HttpComponent\Response;
 use Core\Component\SeoComponent\Meta;
 use Core\Component\SessionComponent\Session;
-use Core\Kernel;
+use Core\ErrorHandler\Exception\ResponseException;
+use Core\ErrorHandler\ExceptionHandler;
+use Core\Model\AbstractModel;
+use Core\Model\RepositoryFactory\AbstractRepositoryFactory;
 use Exception;
-use League\Plates\Engine;
+use League\Plates\Engine as View;
+use PDO;
 
 class AbstractController implements ControllerInterface
 {
 
+    /**
+     * @var Meta
+     */
     protected Meta $meta;
-    protected Session $session;
+
+    /**
+     * @var Request
+     */
     protected Request $request;
+
+    /**
+     * @var Response
+     */
     protected Response $response;
-    private array $routes;
-    private Engine $view;
+
+    /**
+     * @var Session
+     */
+    protected Session $session;
+
+    /**
+     * @var RouteConfig
+     */
+    private RouteConfig $routes;
+
+    /**
+     * @var array
+     */
     private array $templateData;
+
+    /**
+     * @var View
+     */
+    private View $view;
 
     public function __construct()
     {
-        $kernel = new Kernel();
-        $this->session = new Session($kernel->getConfig('APP_SECRET'));
+        $config = new Config('config/env.yaml');
+        $this->session = new Session($config->getConfig('APP_SECRET'));
         $this->session->init();
-        $this->response = new Response();
+        $this->routes = new RouteConfig('config/routes.yaml');
+        $this->response = new Response($this->routes);
         $this->request = new Request($this->session->get('csrf_token'));
         $this->generateToken();
 
-        $this->routes = $kernel->getPlainRoutes();
-        $this->meta = new Meta($kernel->getConfig('meta'));
+        $this->meta = new Meta($config->getConfig('meta'));
+        $this->addTemplateData('response', $this->response);
         $this->addTemplateData('meta', $this->meta);
-        $this->view = new Engine(project_root . $kernel->getConfig('template_base_path'));
+        $this->addTemplateData('session', $this->session);
+        $this->view = new View(project_root . $config->getConfig('template_base_path'));
 
-    }
-
-    private function generateToken(): void
-    {
-        $csrfToken = null;
-        try {
-            $csrfToken = sha1(random_bytes(9));
-        } catch (Exception $e) {
-        }
-
-        $this->session->set('csrf_token', $csrfToken);
     }
 
     /**
@@ -59,25 +83,44 @@ class AbstractController implements ControllerInterface
     }
 
     /**
-     * @return array Ausgabe aller registrierten Routen als Array (ohne manuelle Routen)
+     * @return void
      */
-    public function getRoutes(): array
+    private function generateToken(): void
     {
-        return $this->routes;
+        $csrfToken = null;
+        try {
+            $csrfToken = sha1(random_bytes(9));
+        } catch (Exception $e) {
+        }
+
+        $this->session->set('csrf_token', $csrfToken);
     }
 
     /**
-     * @param string $routeName Name der Route, zu der der Link generiert wird
+     * @param string $route
+     * @param array|null $mandatory
+     * @param null $anchor
      * @return string
      */
-    public function generateUrlFromRoute(string $routeName): string
+    public function generateUrlFromRoute(string $route, array $mandatory = null, $anchor = null): string
     {
-        /**
-         * Todo: Url aus Route-Array (von ./config/routes.yaml) generieren und als String ausgeben.
-         * In HTML-Dokumenten sollen so die Links zu anderen Controllern und dessen Methoden ausgegeben werden.
-         */
+        try {
+            return $this->response->generateUrlFromRoute($route, $mandatory, $anchor);
+        } catch (ResponseException $exception)
+        {
+            $exceptionHandler =  new ExceptionHandler($exception);
+            $exceptionHandler->renderView();
+            exit;
+        }
 
-        return '';
+    }
+
+    /**
+     * @return AbstractRepositoryFactory
+     */
+    public function getRepositoryManager(): AbstractRepositoryFactory
+    {
+        return new AbstractRepositoryFactory();
     }
 
     /**
@@ -91,22 +134,6 @@ class AbstractController implements ControllerInterface
             $this->addTemplateData($key, $value);
         }
         return $this->view->render($template, $this->templateData);
-    }
-
-    /**
-     * @return Meta
-     */
-    private function getMeta(): Meta
-    {
-        return $this->meta;
-    }
-
-    /**
-     * @param Meta $meta
-     */
-    private function setMeta(Meta $meta): void
-    {
-        $this->meta = $meta;
     }
 
 }

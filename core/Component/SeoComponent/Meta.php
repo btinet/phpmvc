@@ -24,7 +24,7 @@ class Meta
      */
     public function get(string $name): string
     {
-        return $this->meta[$name];
+        return $this->meta[$name] ?? 'n/a';
     }
 
     /**

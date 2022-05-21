@@ -29,7 +29,7 @@ class Request
      */
     public function isPostRequest(): bool
     {
-        return (filter_input(INPUT_SERVER, 'REQUEST_METHOD') === 'POST');
+        return ($_SERVER['REQUEST_METHOD'] === 'POST');
     }
 
     /**

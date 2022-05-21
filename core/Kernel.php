@@ -9,6 +9,7 @@
 
 namespace Core;
 
+use Core\Component\ConfigComponent\Config;
 use Core\ErrorHandler\Exception\KernelException;
 use Core\ErrorHandler\ExceptionHandler;
 use Exception;
@@ -17,11 +18,12 @@ use Symfony\Component\Yaml\Yaml;
 final class Kernel
 {
 
+
     private static array $routes = array();
     private array $plainRoutes = array();
     private static ?string $pathNotFound = null;
     private static ?string $methodNotAllowed = null;
-    private array $config = array();
+    protected Config $config;
 
 
     /**
@@ -36,26 +38,7 @@ final class Kernel
         /**
          * Environment-Variablen auslesen und in $config-Variable als Array speichern.
          */
-        self::setConfig(Yaml::parseFile(project_root.'/config/env.yaml'));
-    }
-
-    /**
-     * @return string|array
-     */
-    public function getConfig(string $name)
-    {
-        return $this->config[$name];
-    }
-
-    /**
-     * @param array $config Array containing config name and its value.
-     */
-    public function setConfig(array $config): void
-    {
-        foreach ($config as $key => $value)
-        {
-            $this->config[$key] = $value;
-        }
+        $this->config = new Config('config/env.yaml');
     }
 
     /**
@@ -257,7 +240,8 @@ final class Kernel
                     return self::runControllerMethod($route['controller'], $route['method'], $arguments);
                 } catch (KernelException $e) {
                     $exceptionHandler =  new ExceptionHandler($e);
-                    return $exceptionHandler->renderView();
+                    $exceptionHandler->renderView();
+                    exit;
                 }
             }, $route['request']);
         }

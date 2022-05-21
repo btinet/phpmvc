@@ -2,6 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\Student;
+use App\Menu\MenuBuilder;
+use App\Repository\StudentRepository;
 use Core\Controller\AbstractController;
 
 class AppController extends AbstractController
@@ -14,17 +17,16 @@ class AppController extends AbstractController
     public function index(int $i = null): string
     {
         $luckyNumber = rand(1, 99);
-
-        /**
-         * Meta-Werte werden überschrieben, sollte der Key bereits existieren.
-         */
-        $this->meta->add('description', 'Neuer Titel');
-        /**
-         * Du kannst aber auch den String an das Original anhängen.
-         */
-        $this->meta->append('description', 'Seitenüberschrift', '-');
-
+        $btn = $this->generateUrlFromRoute('app_index_id',[$luckyNumber]);
         $number = null !== $i ? $i : false;
+        $students = $this->getRepositoryManager()->findAll(Student::class);
+        $studentRepository = new StudentRepository();
+        $x = $studentRepository->findLastName([
+            'first_name' => 'Benjamin'
+        ]);
+
+        $mainMenu = new MenuBuilder();
+        $mainMenu->createMenu();
 
         /**
          * Meta-Daten müssen nicht manuell der render-Methode übergeben werden.
@@ -32,7 +34,9 @@ class AppController extends AbstractController
          */
         return $this->render('lucky_number/index.html', [
             'number' => $number,
-            'luckyNumber' => $luckyNumber
+            'btn' => $btn,
+            'students' => $students,
+            'mainMenu' => $mainMenu->render(),
         ]);
     }
 

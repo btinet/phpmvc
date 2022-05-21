@@ -1,16 +1,19 @@
 <?php
+/*
+ * Copyright (c) 2022. Benjamin Wagner
+ */
 
 namespace Core\ErrorHandler;
 
 use Core\Controller\AbstractController;
-use Exception;
+use Error;
 
-class ExceptionHandler extends AbstractController
+class ErrorExceptionHandler extends AbstractController
 {
 
-    private Exception $exception;
+    private Error $exception;
 
-    public function __construct(Exception $exception)
+    public function __construct(Error $exception)
     {
         parent::__construct();
         $this->exception = $exception;
@@ -23,17 +26,17 @@ class ExceptionHandler extends AbstractController
     }
 
     /**
-     * @return Exception
+     * @return Error
      */
-    public function getException(): Exception
+    public function getException(): Error
     {
         return $this->exception;
     }
 
     /**
-     * @param Exception $exception
+     * @param Error $exception
      */
-    public function setException(Exception $exception): void
+    public function setException(Error $exception): void
     {
         $this->exception = $exception;
     }
