@@ -17,3 +17,9 @@ coffee_index:
   controller: 'App\Controller\DrinkCoffeeController'
   method: 'index'
   request: 'get'
+
+char_index:
+  expression: '/char'
+  controller: 'App\Controller\CharController'
+  method: 'setChar'
+  request: 'get'
