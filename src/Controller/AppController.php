@@ -21,9 +21,7 @@ class AppController extends AbstractController
         $number = null !== $i ? $i : false;
         $students = $this->getRepositoryManager()->findAll(Student::class);
         $studentRepository = new StudentRepository();
-        $x = $studentRepository->findLastName([
-            'first_name' => 'Benjamin'
-        ]);
+
 
         $mainMenu = new MenuBuilder();
         $mainMenu->createMenu();

@@ -55,6 +55,9 @@ $this->layout('_layout.standard.html',
 <?php foreach($students as $student): ?>
     <li class="list-group-item"><?=$student?></li>
 <?php endforeach; ?>
+    <?php if(!$students): ?>
+        <li class="list-group-item">Keine Studenten gefunden.</li>
+    <?php endif; ?>
 </ul>
 
 <div id="contento">
