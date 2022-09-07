@@ -17,10 +17,10 @@
         <?php if ($this->section('css')): ?>
             <?=$this->section('css')?>
             <?php else: ?>
-                <link rel="stylesheet" href="<?= $response->generateUrlFromString('/vendor/twbs/bootstrap/dist/css/bootstrap.min.css')?>">
+                <link rel="stylesheet" href="<?= $response->generateUrlFromString('/node_modules/bootstrap/dist/css/bootstrap.min.css')?>">
         <?php endif ?>
 
-        <script type="javascript" src="<?= $response->generateUrlFromString('/vendor/twbs/bootstrap/dist/js/bootstrap.min.js')?>"></script>
+        <script type="javascript" src="<?= $response->generateUrlFromString('/node_modules/dist/js/bootstrap.min.js')?>"></script>
         <script type="text/javascript" src="<?= $response->generateUrlFromString('/assets/test.js')?>"></script>
         <title><?= $meta->get('title') ?></title>
     </head>
