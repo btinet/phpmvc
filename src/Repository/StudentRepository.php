@@ -13,6 +13,7 @@ use ReflectionException;
 class StudentRepository extends AbstractRepositoryFactory
 {
 
+    // Beispiel einer benutzerdefinierten Methode zur SQL-Abfrage
     /**
      * @param string $entity
      * @param array $data
