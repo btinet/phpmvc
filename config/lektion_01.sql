@@ -74,4 +74,11 @@ SELECT MIN(Fläche), MAX(Fläche) FROM cia;
 select count(distinct region) from cia;
 
 
+# Lektion 3
 
+# Übung 1
+# Zu welcher Kategorie gehören die 'Teatime Chocolate Biscuits'?
+select Kategoriename from Kategorie c inner join Artikel a on (a.KategorieNr = c.KategorieNr) where a.Artikelname ="Teatime Chocolate Biscuits";
+
+# Übung 2
+# Erstelle eine Abfrage mit den Attributen ArtikelNr, Artikelname und Lieferantenfirma
